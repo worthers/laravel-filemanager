@@ -104,6 +104,8 @@ return [
 
     'temporary_url_duration'   => 30,
 
+    's3_acls_disabled'         => false,
+
     'rename_file'              => false,
 
     'rename_duplicates'        => false,

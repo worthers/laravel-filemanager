@@ -123,6 +123,20 @@ Detail options are explained here:
 
 Disk name of Laravel File System. All files are placed in here. Choose one of the `disks` section in `config/filesystems.php`.
 
+### temporary\_url\_duration
+
+* type: `int`
+* default: `30`
+
+Duration of AWS S3 temporary urls, in minutes.
+
+### s3\_acls\_disabled
+
+* type: `boolean`
+* default: `false`
+
+Enable to support AWS S3 “Bucket owner enforced” (ACL-disabled) buckets.
+
 ### rename\_file
 
 * type: `boolean`

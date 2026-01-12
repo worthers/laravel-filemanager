@@ -35,17 +35,27 @@ class LfmStorageRepository
 
     public function save($file)
     {
+        $config = $this->disk->getConfig();
+
         $nameint = strripos($this->path, "/");
         $nameclean = substr($this->path, $nameint + 1);
         $pathclean = substr_replace($this->path, "", $nameint);
-        $this->disk->putFileAs($pathclean, $file, $nameclean, 'public');
+        $options = 'public';
+        if (key_exists('driver', $config) && $config['driver'] == 's3'
+            && $this->helper->config('s3_acls_disabled')
+        ) {
+            $options = [];
+        }
+        $this->disk->putFileAs($pathclean, $file, $nameclean, $options);
     }
 
     public function url($path)
     {
         $config = $this->disk->getConfig();
 
-        if (key_exists('driver', $config) && $config['driver'] == 's3') {
+        if (key_exists('driver', $config) && $config['driver'] == 's3'
+			&& !$this->helper->config('s3_acls_disabled')
+        ) {
             $duration = $this->helper->config('temporary_url_duration');
             return $this->disk->temporaryUrl($path, now()->addMinutes($duration));
         } else {

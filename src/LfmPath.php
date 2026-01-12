@@ -336,7 +336,15 @@ class LfmPath
         $encoded_image = $this->imageService->read($original_image->get())
             ->cover($thumbWidth, $thumbHeight)
             ->encodeByMediaType();
-        
-        $this->storage->put($encoded_image, 'public');
+
+        $config = $this->storage->getConfig();
+        $options = 'public';
+        if (key_exists('driver', $config) && $config['driver'] == 's3'
+            && $this->helper->config('s3_acls_disabled')
+        ) {
+            $options = [];
+        }
+
+        $this->storage->put($encoded_image, $options);
     }
 }
